@@ -1,22 +1,36 @@
 import HTML from './index.html'
 import './style.css'
+class Project {
+  tasks = []
+  static LIST = []
+  constructor (title, description) {
+    this.title = title
+    this.description = description
+    Project.LIST.push(this)
+  }
+
+  add (id) {
+    this.tasks.push(id)
+  }
+
+  remove (id) {
+    // find member of this.tasks that has id=id and delete
+  }
+}
 class Task {
   id
   description
   timeCreated
-  dueDate
-  status // current, priority, suspended, abandoned?
-  // requisites = []
-  // requiredBy = []
 
-  static taskList = []
+  static LIST = []
   constructor (description, dueDate) {
     this.description = description
     this.dueDate = dueDate
-    for (let i = 0; i <= Task.taskList.length; i++) {
-      if (Task.taskList[i] === undefined) {
+    for (let i = 0; i <= Task.LIST.length; i++) {
+      if (Task.LIST[i] === undefined) {
         this.id = i
-        Task.taskList[i] = this
+        Task.LIST[i] = this
+        defaultProject.add(i)
         break
       }
     }
@@ -26,30 +40,29 @@ class Task {
   static listAll () {
     console.table(Task.taskList)
   }
-  /*
-  isRequiredBy (id) {
-    console.log(`${this.id} is required by ${id}`)
-    this.requiredBy.push(id)
-  }
-
-  requires (id) {
-    console.log(`${this.id} requires ${id}`)
-    this.requisites.push(id)
-    Task.taskList[id].isRequiredBy(this.id)
-  }
-  */
 
   delete () {
     delete Task.taskList[this.id]
   }
+
+  toString () {
+    return `Task#${this.id} (${this.description}) is due ${this.dueDate.toDateString()}`
+  }
 }
 // insert some sample data
-
-;[('task 1', 'x'), ('task 2', 'y'), ('task 3', 'z')].forEach(
-  (a, b) => new Task(a, b)
+const defaultProject = new Project(
+  'General',
+  'This is the default project yada yada yada'
 )
+;[
+  ['task 1', new Date(Date.now() + (24 * 60 * 60 * 1000))],
+  ['task 2', new Date(Date.now() + (48 * 60 * 60 * 1000))],
+  ['task 3', new Date(Date.now() + (72 * 60 * 60 * 1000))]
+].forEach(t => new Task(t[0], t[1]))
 
 Task.listAll()
 
 document.body.innerHTML = HTML
-console.table(HTML)
+console.table(Project.LIST)
+console.table(defaultProject.tasks)
+Task.LIST.forEach(t => console.log(t.toString()))
