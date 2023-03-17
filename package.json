@@ -17,7 +17,10 @@
   },
   "homepage": "https://github.com/techni-ca/todo-or-not-todo#readme",
   "devDependencies": {
+    "css-loader": "^6.7.3",
+    "html-loader": "^4.2.0",
     "html-webpack-plugin": "^5.5.0",
+    "style-loader": "^3.3.2",
     "webpack": "^5.76.2",
     "webpack-cli": "^5.0.1"
   }
