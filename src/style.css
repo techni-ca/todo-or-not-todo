@@ -1,6 +1,75 @@
-.one {
-  background-color: red
+:root {
+  --default-border: 1px solid black;
+  --title-bgcolor: skyblue;
+  --page-bgcolor: lightcyan;
 }
-.two {
-  background-color: blue
+.title {
+  border: var(--default-border);
+  border-bottom: none;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  padding: 1rem;
+  margin-bottom: 0px;
+  background-color: var(--title-bgcolor);
+}
+.tab-bg {
+  display: grid;
+  grid-template: 50% 50% / 100%;
+}
+.tab-bg-upper {
+  grid-area: 1 / 1 / 2 / 2;
+  background-color: var(--title-bgcolor);
+}
+.tab-bg-lower {
+  grid-area: 2 / 1 / 3 / 2;
+  background-color: var(--page-bgcolor);
+}
+.tab-bar {
+  grid-area: 1 / 1 / 3 / 2;
+  display: flex;
+  border: var(--default-border);
+  border-top: none;
+  border-bottom: none;
+}
+
+.tab {
+  border: var(--default-border);
+  border-top-left-radius: .5rem;
+  border-top-right-radius: .5rem;
+  border-left: none;
+  padding: .5rem;
+  background-color: powderblue;
+}
+.before-active {
+  border-right: var(--default-border);
+  border-bottom-right-radius: .5rem;
+}
+.active {
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  background-color: var(--page-bgcolor);
+}
+.active + .tab {
+  border-left: var(--default-border);
+  border-bottom-left-radius: .5rem;
+}
+.after-tab {
+  border: var(--default-border);
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  flex: 1;
+  background-color: var(--title-bgcolor);
+}
+.page {
+  border: var(--default-border);
+  border-top: none;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  background-color: var(--page-bgcolor);
+  height: 10rem;
+}
+ul {
+  margin: 0;
 }

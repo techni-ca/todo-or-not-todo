@@ -1,5 +1,7 @@
 import HTML from './index.html'
 import './style.css'
+import { display } from './display'
+
 class Project {
   tasks = []
   static LIST = []
@@ -19,6 +21,7 @@ class Project {
 }
 class Task {
   id
+  projectId
   description
   timeCreated
 
@@ -60,9 +63,5 @@ const defaultProject = new Project(
   ['task 3', new Date(Date.now() + (72 * 60 * 60 * 1000))]
 ].forEach(t => new Task(t[0], t[1]))
 
-Task.listAll()
-
 document.body.innerHTML = HTML
-console.table(Project.LIST)
-console.table(defaultProject.tasks)
-Task.LIST.forEach(t => console.log(t.toString()))
+display(Project, Task, defaultProject)
