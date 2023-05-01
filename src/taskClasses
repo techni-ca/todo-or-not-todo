@@ -1,0 +1,38 @@
+class Project {
+  tasks = []
+  static LIST = []
+  constructor (title, description) {
+    this.title = title
+    this.description = description
+    Project.LIST.push(this)
+  }
+
+  add (task) {
+    this.tasks.push(task)
+  }
+
+  remove (task) {
+    const index = this.tasks.indexOf(task)
+    const newTasks = this.tasks.splice(index, 1)
+    this.tasks = newTasks
+  }
+}
+class Task {
+  constructor (project, description, dueDate) {
+    project.add(this)
+    this.description = description
+    this.dueDate = dueDate
+    this.timeCreated = Date.now()
+  }
+
+  delete () {
+    this.project.remove(this)
+  }
+
+  toString () {
+    return `(${this.description}) is due ${this.dueDate.toDateString()}`
+  }
+}
+
+export { Project }
+export { Task }

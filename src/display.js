@@ -1,29 +1,35 @@
-function display(Project, Task, defaultProject) {
-  const tabBar = document.querySelector('.tab-bar')
-  const lastTab = tabBar.firstElementChild
+import { Project } from './taskClasses'
 
-  Project.LIST.forEach(p => {
-    const thisSpan = document.createElement('span')
-    thisSpan.classList.add('tab')
-    thisSpan.textContent = p.title
-    tabBar.insertBefore(thisSpan, lastTab)
-  })
+class Display {
+  project (activeProject) {
+    const tabBar = document.querySelector('.tab-bar')
+    const lastTab = tabBar.firstElementChild
 
-  /*
-  when active is other than the first one, the one before the active gets class before-active
-  */
-  const activeTab = tabBar.firstElementChild
-  activeTab.classList.add('active')
+    let lastSpan = null
+    Project.LIST.forEach(p => {
+      const thisSpan = document.createElement('span')
+      thisSpan.classList.add('tab')
+      if (p === activeProject) {
+        thisSpan.classList.add('active')
+        if (lastSpan !== null) {
+          lastSpan.classList.add('before-active')
+        }
+      }
+      thisSpan.textContent = p.title
+      tabBar.insertBefore(thisSpan, lastTab)
+      lastSpan = thisSpan
+    })
 
-  const list = document.createElement('ul')
-  list.textContent = defaultProject.description
-  defaultProject.tasks.forEach(t => {
-    const item = document.createElement('li')
-    item.textContent = Task.LIST[t].toString()
-    list.appendChild(item)
-  })
-  const page = document.querySelector('.page')
-  page.appendChild(list)
+    const list = document.createElement('ul')
+    list.textContent = activeProject.description
+    activeProject.tasks.forEach(t => {
+      const item = document.createElement('li')
+      item.textContent = t.toString()
+      list.appendChild(item)
+    })
+    const page = document.querySelector('.page')
+    page.appendChild(list)
+  }
 }
 
-export { display }
+export { Display }
