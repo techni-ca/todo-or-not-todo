@@ -4,7 +4,6 @@ import { Project } from './taskClasses'
 
 class Tab {
   static LIST = []
-
   constructor (project) {
     const tabBar = document.querySelector('.tab-bar')
     const lastTab = document.getElementById('add')
@@ -13,6 +12,7 @@ class Tab {
     Tab.LIST.push(this)
     this.element.classList.add('tab')
     this.element.textContent = this.project.title
+    this.element.style.flexBasis = `${Tab.tabSize}%`
     tabBar.insertBefore(this.element, lastTab)
   }
 
@@ -24,9 +24,9 @@ class Tab {
   }
 
   static deactivateAll () {
-    Tab.LIST.forEach(t => {
-      t.element.classList.remove('before-active')
-      t.element.classList.remove('active')
+    Tab.LIST.forEach(tab => {
+      tab.element.classList.remove('before-active')
+      tab.element.classList.remove('active')
     })
   }
 
@@ -39,32 +39,60 @@ class Tab {
     }
     this.active = true
   }
+
+  changeTitle () {
+    const oldTitle = this.element.textContent
+    if (oldTitle === '') return
+    const inputBox = document.createElement('input')
+    inputBox.value = oldTitle
+    inputBox.addEventListener('keydown', (e) => {
+      switch (e.key) {
+        case 'Escape': inputBox.value = '' // falls through
+        case 'Enter': inputBox.blur()
+      }
+    })
+    inputBox.addEventListener('blur', () => {
+      if (inputBox.value !== '') {
+        this.project.title = inputBox.value
+      }
+      this.element.textContent = this.project.title
+    })
+    this.element.textContent = ''
+    this.element.appendChild(inputBox)
+    inputBox.focus({ focusVisible: true })
+  }
 }
 
 class Input {
   constructor (display) {
-    this.display = display
+    this.output = display
   }
 
   watchAllTabs () {
-    Tab.LIST.forEach(t => this.watchTab(t))
+    Tab.LIST.forEach(tab => this.watchTab(tab))
     document.getElementById('add').addEventListener('click', () => {
       const newProject = new Project('New Project', 'New Project Description')
       this.watchTab(new Tab(newProject))
-      this.display.activateTab(newProject)
+      this.output.activateTab(newProject)
     })
   }
 
   watchTab (tab) {
-    tab.element.addEventListener('click', () => this.display.activateTab(tab.project))
+    tab.element.addEventListener('click', () => {
+      if (tab.element.classList.contains('active')) {
+        tab.changeTitle()
+      } else {
+        this.output.activateTab(tab.project)
+      }
+    })
   }
 }
 
 class Output {
   constructor (list) {
     document.body.innerHTML = HTML
-    list.forEach(p => {
-      return new Tab(p)
+    list.forEach(project => {
+      return new Tab(project)
     })
   }
 
@@ -77,9 +105,9 @@ class Output {
 
     const list = document.createElement('ul')
     list.textContent = project.description
-    project.tasks.forEach(t => {
+    project.tasks.forEach(task => {
       const item = document.createElement('li')
-      item.textContent = t.toString()
+      item.textContent = task.toString()
       list.appendChild(item)
     })
     const page = document.querySelector('.page')
