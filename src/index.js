@@ -22,8 +22,7 @@ const otherProject = new Project(
 ].forEach(t => new Task(otherProject, t[0], t[1]))
 
 const myOutput = new Output(Project.LIST)
-myOutput.activateTab(otherProject)
-myOutput.activateTab(defaultProject)
-
 const myInput = new Input(myOutput)
+
+myOutput.activateTab(defaultProject)
 myInput.watchAllTabs()

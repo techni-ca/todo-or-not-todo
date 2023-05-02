@@ -54,6 +54,7 @@
   border-left: none;
   border-right: none;
   border-bottom: none;
+  flex: 0 0 10%;
   background-color: var(--page-bgcolor);
 }
 .active + .tab {

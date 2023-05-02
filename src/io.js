@@ -1,4 +1,4 @@
-import HTML from './index.html'
+import starterHTML from './index.html'
 import './style.css'
 import { Project } from './taskClasses'
 
@@ -40,7 +40,7 @@ class Tab {
     this.active = true
   }
 
-  changeTitle () {
+  editTitle () {
     const oldTitle = this.element.textContent
     if (oldTitle === '') return
     const inputBox = document.createElement('input')
@@ -80,7 +80,7 @@ class Input {
   watchTab (tab) {
     tab.element.addEventListener('click', () => {
       if (tab.element.classList.contains('active')) {
-        tab.changeTitle()
+        tab.editTitle()
       } else {
         this.output.activateTab(tab.project)
       }
@@ -90,7 +90,7 @@ class Input {
 
 class Output {
   constructor (list) {
-    document.body.innerHTML = HTML
+    document.body.innerHTML = starterHTML
     list.forEach(project => {
       return new Tab(project)
     })
