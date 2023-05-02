@@ -14,6 +14,7 @@ class Tab {
     this.element.textContent = this.project.title
     this.element.style.flexBasis = `${Tab.tabSize}%`
     tabBar.insertBefore(this.element, lastTab)
+    this.active = false
   }
 
   static findTab (project) {
@@ -23,11 +24,32 @@ class Tab {
     return null
   }
 
+  static findActive () {
+    for (let i = 0; i < Tab.LIST.length; i++) {
+      if (Tab.LIST[i].active) return i
+    }
+    return null
+  }
+
   static deactivateAll () {
     Tab.LIST.forEach(tab => {
       tab.element.classList.remove('before-active')
       tab.element.classList.remove('active')
+      tab.active = false
     })
+  }
+
+  static moveActive (change) {
+    const oldIndex = Tab.findActive()
+    const newIndex = oldIndex + change
+    if (newIndex < 0 || newIndex >= Tab.LIST.length) return null
+    Tab.deactivateAll()
+    const project = Tab.LIST[oldIndex].project
+    Tab.LIST[oldIndex].project = Tab.LIST[newIndex].project
+    Tab.LIST[oldIndex].element.textContent = Tab.LIST[newIndex].project.title
+    Tab.LIST[newIndex].project = project
+    Tab.LIST[newIndex].element.textContent = project.title
+    Tab.LIST[newIndex].makeActive()
   }
 
   makeActive () {
@@ -75,6 +97,8 @@ class Input {
       this.watchTab(new Tab(newProject))
       this.output.activateTab(newProject)
     })
+    document.querySelector('.move.left').addEventListener('click', () => { Tab.moveActive(-1) })
+    document.querySelector('.move.right').addEventListener('click', () => { Tab.moveActive(1) })
   }
 
   watchTab (tab) {
@@ -91,30 +115,23 @@ class Input {
 class Output {
   constructor (list) {
     document.body.innerHTML = starterHTML
-    list.forEach(project => {
-      return new Tab(project)
-    })
+    list.forEach(project => new Tab(project))
   }
 
   activateTab (project) {
     const tabToActivate = Tab.findTab(project)
     if (tabToActivate === null) return false
-
     Tab.deactivateAll()
     tabToActivate.makeActive()
 
-    const list = document.createElement('ul')
-    list.textContent = project.description
+    const fragment = document.createDocumentFragment()
     project.tasks.forEach(task => {
       const item = document.createElement('li')
       item.textContent = task.toString()
-      list.appendChild(item)
+      fragment.appendChild(item)
     })
-    const page = document.querySelector('.page')
-    while (page.firstChild) {
-      page.removeChild(page.firstChild)
-    }
-    page.appendChild(list)
+    document.getElementById('tasklist').replaceChildren(fragment)
+    document.getElementById('description').textContent = project.description
   }
 }
 
