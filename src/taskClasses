@@ -17,6 +17,7 @@ class Project {
     this.tasks = newTasks
   }
 }
+
 class Task {
   constructor (project, description, dueDate) {
     project.add(this)

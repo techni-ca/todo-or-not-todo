@@ -1,8 +1,5 @@
-import HTML from './index.html'
-import './style.css'
 import { Project, Task } from './taskClasses'
-import { Display } from './display'
-document.body.innerHTML = HTML
+import { Input, Output } from './io'
 
 // insert some sample data
 const defaultProject = new Project(
@@ -24,6 +21,9 @@ const otherProject = new Project(
   ['task C', new Date(Date.now() + (144 * 3600000))]
 ].forEach(t => new Task(otherProject, t[0], t[1]))
 
-const myDisplay = new Display()
-myDisplay.project(defaultProject)
-myDisplay.project(otherProject)
+const myOutput = new Output(Project.LIST)
+myOutput.activateTab(otherProject)
+myOutput.activateTab(defaultProject)
+
+const myInput = new Input(myOutput)
+myInput.watchAllTabs()
