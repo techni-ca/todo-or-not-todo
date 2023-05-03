@@ -50,7 +50,8 @@
 #add {
   flex: 0 0 content;
 }
-.before-active {
+#left {
+  flex: 0 0 content;
   border-right: var(--default-border);
   border-bottom-right-radius: .5rem;
 }
@@ -58,11 +59,12 @@
   border-left: none;
   border-right: none;
   border-bottom: none;
-  flex: 0 0 10%;
   font-weight: bold;
   background-color: var(--page-bgcolor);
+  flex: 0 0 10%;
 }
-.active + .tab {
+#right {
+  flex: 0 0 content;
   border-left: var(--default-border);
   border-bottom-left-radius: .5rem;
 }
@@ -71,7 +73,7 @@
   border-top: none;
   border-left: none;
   border-right: none;
-  flex: 1 0 1%;
+  flex: 1 0 0;
   background-color: var(--title-bgcolor);
 }
 .page {
@@ -97,18 +99,6 @@ input {
   font-weight: bold;
   font-style: italic;
   background-color: var(--page-bgcolor);
-}
-.headline {
-  display: flex;
-}
-.move {
-  margin: 5px;
-  flex: 0 0 content;
-}
-#description {
-  flex: 1 1 auto;
-  margin: 5px;
-  font-size: x-large;
 }
 #tasklist > li {
   font-size: normal;

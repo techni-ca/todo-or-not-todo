@@ -33,10 +33,11 @@ class Tab {
 
   static deactivateAll () {
     Tab.LIST.forEach(tab => {
-      tab.element.classList.remove('before-active')
-      tab.element.classList.remove('active')
       tab.active = false
     })
+    document.querySelectorAll('.active').forEach(element => element.classList.remove('active'))
+    document.getElementById('left')?.remove()
+    document.getElementById('right')?.remove()
   }
 
   static moveActive (change) {
@@ -44,27 +45,39 @@ class Tab {
     const newIndex = oldIndex + change
     if (newIndex < 0 || newIndex >= Tab.LIST.length) return null
     Tab.deactivateAll()
-    const project = Tab.LIST[oldIndex].project
+
+    const activeProject = Tab.LIST[oldIndex].project
     Tab.LIST[oldIndex].project = Tab.LIST[newIndex].project
-    Tab.LIST[oldIndex].element.textContent = Tab.LIST[newIndex].project.title
-    Tab.LIST[newIndex].project = project
-    Tab.LIST[newIndex].element.textContent = project.title
+    Tab.LIST[newIndex].project = activeProject
+
+    Tab.LIST[newIndex].element.textContent = Tab.LIST[newIndex].project.title
+    Tab.LIST[oldIndex].element.textContent = Tab.LIST[oldIndex].project.title
+
     Tab.LIST[newIndex].makeActive()
   }
 
   makeActive () {
-    const myIndex = Tab.LIST.indexOf(this)
+    const left = document.createElement('span')
+    const right = document.createElement('span')
+    left.id = 'left'
+    right.id = 'right'
+    left.className = 'tab'
+    right.className = 'tab'
+    left.textContent = '<'
+    right.textContent = '>'
     this.element.classList.add('active')
-    if (myIndex > 0) {
-      const prevTab = Tab.LIST[myIndex - 1]
-      prevTab.element.classList.add('before-active')
-    }
+    this.element.before(left)
+    this.element.after(right)
+
+    left.addEventListener('click', () => Tab.moveActive(-1))
+    right.addEventListener('click', () => Tab.moveActive(1))
+
     this.active = true
   }
 
   editTitle () {
     const oldTitle = this.element.textContent
-    if (oldTitle === '') return
+    if (oldTitle === '' || this.active !== true) return
     const inputBox = document.createElement('input')
     inputBox.value = oldTitle
     inputBox.addEventListener('keydown', (e) => {
@@ -97,13 +110,11 @@ class Input {
       this.watchTab(new Tab(newProject))
       this.output.activateTab(newProject)
     })
-    document.querySelector('.move.left').addEventListener('click', () => { Tab.moveActive(-1) })
-    document.querySelector('.move.right').addEventListener('click', () => { Tab.moveActive(1) })
   }
 
   watchTab (tab) {
     tab.element.addEventListener('click', () => {
-      if (tab.element.classList.contains('active')) {
+      if (tab.active) {
         tab.editTitle()
       } else {
         this.output.activateTab(tab.project)
