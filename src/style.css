@@ -1,7 +1,7 @@
 :root {
   --default-border: 1px solid black;
-  --title-bgcolor: skyblue;
-  --page-bgcolor: lightcyan;
+  --title-bgcolor: #87ceeb;
+  --page-bgcolor: #e0ffff;
 }
 * {
   font-family: 'times new roman', serif;
@@ -40,7 +40,7 @@
   border-top-right-radius: .5rem;
   border-left: none;
   padding: .5rem;
-  background-color: powderblue;
+  background-color: #b0e0e6;
   flex: 0 1 10%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -49,9 +49,12 @@
 }
 #add {
   flex: 0 0 content;
+  background-color: #a0cfec;
 }
 #left, #right {
   flex: 0 0 content;
+  background-color: #bbffff;
+
 }
 #left {
   border-right: var(--default-border);
@@ -96,7 +99,7 @@
   border-bottom-left-radius: 1rem;
   border-bottom-right-radius: 1rem;
   background-color: var(--page-bgcolor);
-  height: 10rem;
+  height: 35rem;
 }
 #description {
   padding: 5px;
