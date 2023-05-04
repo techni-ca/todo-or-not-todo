@@ -35,7 +35,9 @@ class Tab {
     Tab.LIST.forEach(tab => {
       tab.active = false
     })
-    document.querySelectorAll('.active').forEach(element => element.classList.remove('active'))
+    document
+      .querySelectorAll('.active')
+      .forEach(element => element.classList.remove('active'))
     document.getElementById('left')?.remove()
     document.getElementById('right')?.remove()
   }
@@ -57,21 +59,23 @@ class Tab {
   }
 
   makeActive () {
-    const left = document.createElement('span')
-    const right = document.createElement('span')
-    left.id = 'left'
-    right.id = 'right'
-    left.className = 'tab'
-    right.className = 'tab'
-    left.textContent = '<'
-    right.textContent = '>'
+    if (Tab.LIST.indexOf(this) > 0) {
+      const left = document.createElement('span')
+      left.addEventListener('click', () => Tab.moveActive(-1))
+      this.element.before(
+        Object.assign(left, { id: 'left', className: 'tab', textContent: '<' })
+      )
+    }
+
+    if (Tab.LIST.indexOf(this) < Tab.LIST.length - 1) {
+      const right = document.createElement('span')
+      right.addEventListener('click', () => Tab.moveActive(1))
+      this.element.after(
+        Object.assign(right, { id: 'right', className: 'tab', textContent: '>' })
+      )
+    }
+
     this.element.classList.add('active')
-    this.element.before(left)
-    this.element.after(right)
-
-    left.addEventListener('click', () => Tab.moveActive(-1))
-    right.addEventListener('click', () => Tab.moveActive(1))
-
     this.active = true
   }
 
@@ -80,10 +84,12 @@ class Tab {
     if (oldTitle === '' || this.active !== true) return
     const inputBox = document.createElement('input')
     inputBox.value = oldTitle
-    inputBox.addEventListener('keydown', (e) => {
+    inputBox.addEventListener('keydown', e => {
       switch (e.key) {
-        case 'Escape': inputBox.value = '' // falls through
-        case 'Enter': inputBox.blur()
+        case 'Escape':
+          inputBox.value = '' // falls through
+        case 'Enter':
+          inputBox.blur()
       }
     })
     inputBox.addEventListener('blur', () => {
