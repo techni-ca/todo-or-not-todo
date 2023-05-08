@@ -72,19 +72,7 @@
   border-left: var(--default-border);
   border-bottom-left-radius: .5rem;
 }
-.active > input {
-  border-style: none none dotted none;
-  outline: none;
-  box-sizing: border-box;  
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  margin: 0;
-  font-size: large;
-  font-weight: bold;
-  font-style: italic;
-  background-color: var(--page-bgcolor);
-}
+
 .after-tab {
   border: var(--default-border);
   border-top: none;
@@ -105,10 +93,31 @@
   padding: 5px;
   font-size: large;
   margin-left: 5px;
+  margin-right: 5px;
 }
 #tasklist {
   margin: 0;
 }
 #tasklist > li {
   font-size: normal;
+}
+
+input {
+  border-style: none none dotted none;
+  outline: none;
+  box-sizing: border-box;  
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  font-size: large;
+  font-style: italic;
+  background-color: var(--page-bgcolor);
+}
+
+.active > input {
+  font-weight: bold;
+}
+#description > input {
+  
 }

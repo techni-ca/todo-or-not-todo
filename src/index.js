@@ -1,5 +1,5 @@
 import { Project, Task } from './taskClasses'
-import { Input, Output } from './io'
+import { inputOutput } from './io'
 
 // insert some sample data
 const defaultProject = new Project(
@@ -21,8 +21,4 @@ const otherProject = new Project(
   ['task C', new Date(Date.now() + (144 * 3600000))]
 ].forEach(t => new Task(otherProject, t[0], t[1]))
 
-const myOutput = new Output(Project.LIST)
-const myInput = new Input(myOutput)
-
-myOutput.activateTab(defaultProject)
-myInput.watchAllTabs()
+inputOutput.addProjects(Project.LIST)
