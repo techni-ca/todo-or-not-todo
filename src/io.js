@@ -1,8 +1,12 @@
 import starterHTML from './index.html'
 import './style.css'
 import { Project, Task } from './taskClasses'
-function countLines (inString) {
-  return (inString.match(/\n/g) || '').length + 1
+
+function resizeTextarea (element) {
+  element.rows = 1
+  while (element.clientHeight < element.scrollHeight) {
+    element.rows = element.rows + 1
+  }
 }
 
 class Tab {
@@ -112,7 +116,13 @@ class Tab {
     })
     inputBox.addEventListener('beforeinput', e => {
       if (e.data !== null) {
-        if (e.data.length + inputBox.value.length + inputBox.selectionStart - inputBox.selectionEnd > 20) {
+        if (
+          e.data.length +
+            inputBox.value.length +
+            inputBox.selectionStart -
+            inputBox.selectionEnd >
+          20
+        ) {
           e.preventDefault()
         }
       }
@@ -150,7 +160,7 @@ class Page {
   projectDetails (project) {
     this.project = project
     this.clearTasks()
-    project.tasks.forEach((task) => {
+    project.tasks.forEach(task => {
       this.addTask(task)
     })
     this.description.textContent = project.description
@@ -198,7 +208,13 @@ class Page {
   }
 
   newTask () {
-    const newTask = new Task(this.project, 'New Task', 'New Task Description', new Date(Date.now()), 9)
+    const newTask = new Task(
+      this.project,
+      'New Task',
+      'New Task Description',
+      new Date(Date.now()),
+      9
+    )
     this.projectDetails(this.project)
     this.taskElements.forEach(taskElement => {
       if (taskElement.task === newTask) {
@@ -208,10 +224,44 @@ class Page {
   }
 
   editTaskTitle (element) {
-    console.log(`change ${element.className} from ${this.currentTask.title}`)
+    const oldTitle = element.textContent
+    if (oldTitle === '') return
+    const inputBox = document.createElement('input')
+    inputBox.value = oldTitle
+    inputBox.addEventListener('keydown', e => {
+      switch (e.key) {
+        case 'Escape':
+          inputBox.value = '' // falls through
+        case 'Enter':
+          inputBox.blur()
+      }
+    })
+    inputBox.addEventListener('beforeinput', e => {
+      if (e.data !== null) {
+        if (
+          e.data.length +
+            inputBox.value.length +
+            inputBox.selectionStart -
+            inputBox.selectionEnd >
+          100
+        ) {
+          e.preventDefault()
+        }
+      }
+    })
+    inputBox.addEventListener('blur', () => {
+      if (inputBox.value !== '') {
+        this.currentTask.title = inputBox.value
+      }
+      element.textContent = this.currentTask.title
+    })
+    element.textContent = ''
+    element.appendChild(inputBox)
+    inputBox.focus({ focusVisible: true })
   }
 
   moveTaskToAnotherProject (element) {
+    console.log('move this task to another project')
   }
 
   completeTask (element) {
@@ -221,11 +271,42 @@ class Page {
   }
 
   editTaskDescription (element) {
-    console.log(`change ${element.className} from ${this.currentTask.description}`)
+    const oldDescription = element.textContent
+    if (oldDescription === '') return
+    const inputBox = document.createElement('textarea')
+    inputBox.value = oldDescription
+
+    inputBox.addEventListener('keydown', e => {
+      switch (e.key) {
+        case 'Escape':
+          inputBox.value = '' // falls through
+        case 'Tab':
+          inputBox.blur()
+          e.preventDefault()
+      }
+    })
+    inputBox.addEventListener('input', e => {
+      resizeTextarea(inputBox)
+    })
+    inputBox.addEventListener('blur', () => {
+      inputBox.value = inputBox.value.trim()
+      if (inputBox.value !== '') {
+        this.currentTask.description = inputBox.value
+      }
+      element.textContent = this.currentTask.description
+    })
+    element.textContent = ''
+    element.appendChild(inputBox)
+    resizeTextarea(inputBox)
+    inputBox.focus({ focusVisible: true })
   }
 
   editDueDate (element) {
-    console.log(`change ${element.className} from ${this.currentTask.dueDate.toDateString()}`)
+    console.log(
+      `change ${
+        element.className
+      } from ${this.currentTask.dueDate.toDateString()}`
+    )
   }
 
   editPriority (element) {
@@ -240,35 +321,35 @@ class Page {
       Object.assign(document.createElement('button'), {
         className: 'completed',
         textContent: 'X',
-        onclick: (e) => this.completeTask(e.target)
+        onclick: e => this.completeTask(e.target)
       })
     )
     details.appendChild(
       Object.assign(document.createElement('button'), {
         className: 'move',
         textContent: 'Move to a different Project',
-        onclick: (e) => this.moveTaskToAnotherProject(e.target)
+        onclick: e => this.moveTaskToAnotherProject(e.target)
       })
     )
     details.appendChild(
       Object.assign(document.createElement('div'), {
         className: 'description',
         textContent: task.description,
-        onclick: (e) => this.editTaskDescription(e.target)
+        onclick: e => this.editTaskDescription(e.target)
       })
     )
     details.appendChild(
       Object.assign(document.createElement('div'), {
         className: 'duedate',
         textContent: `${task.dueDate.toDateString()}`,
-        onclick: (e) => this.editDueDate(e.target)
+        onclick: e => this.editDueDate(e.target)
       })
     )
     details.appendChild(
       Object.assign(document.createElement('div'), {
         className: 'priority',
         textContent: task.priority,
-        onclick: (e) => this.editPriority(e.target)
+        onclick: e => this.editPriority(e.target)
       })
     )
     this.closeTasks()
@@ -283,7 +364,6 @@ class Page {
     if (oldDescription === '') return
     const inputBox = document.createElement('textarea')
     inputBox.value = oldDescription
-    inputBox.rows = countLines(inputBox.value)
     inputBox.addEventListener('keydown', e => {
       switch (e.key) {
         case 'Escape':
@@ -294,8 +374,8 @@ class Page {
           if (!e.shiftKey) inputBox.blur()
       }
     })
-    inputBox.addEventListener('input', e => {
-      inputBox.rows = countLines(inputBox.value)
+    inputBox.addEventListener('input', () => {
+      resizeTextarea(inputBox)
     })
     inputBox.addEventListener('blur', () => {
       inputBox.value = inputBox.value.trim()
@@ -306,6 +386,7 @@ class Page {
     })
     this.description.textContent = ''
     this.description.appendChild(inputBox)
+    resizeTextarea(inputBox)
     inputBox.focus({ focusVisible: true })
   }
 }
