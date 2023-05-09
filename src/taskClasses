@@ -1,6 +1,7 @@
 class Project {
-  tasks = []
   static LIST = []
+  tasks = []
+
   constructor (title, description) {
     this.title = title
     this.description = description
@@ -13,25 +14,33 @@ class Project {
 
   remove (task) {
     const index = this.tasks.indexOf(task)
-    const newTasks = this.tasks.splice(index, 1)
-    this.tasks = newTasks
+    this.tasks.splice(index, 1)
+    return true
+  }
+
+  delete () {
+    if (this.tasks.length > 0) {
+      return false;
+    } else {
+      const index = Project.LIST.indexOf(this)
+      Project.LIST.splice(index, 1)
+      return true
+    }
   }
 }
 
 class Task {
-  constructor (project, description, dueDate) {
+  constructor (project, title, description, dueDate, priority) {
     project.add(this)
+    this.project = project
+    this.title = title
     this.description = description
     this.dueDate = dueDate
-    this.timeCreated = Date.now()
+    this.priority = priority
   }
 
   delete () {
-    this.project.remove(this)
-  }
-
-  toString () {
-    return `(${this.description}) is due ${this.dueDate.toDateString()}`
+    return this.project.remove(this)
   }
 }
 
