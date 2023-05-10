@@ -20,7 +20,7 @@ class Project {
 
   delete () {
     if (this.tasks.length > 0) {
-      return false;
+      return false
     } else {
       const index = Project.LIST.indexOf(this)
       Project.LIST.splice(index, 1)
