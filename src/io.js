@@ -265,11 +265,7 @@ class Page {
     inputBox.focus({ focusVisible: true })
   }
 
-  moveTaskToAnotherProject (element) {
-    console.log('move this task to another project')
-  }
-
-  completeTask (element) {
+  completeTask () {
     if (this.currentTask.delete()) {
       this.projectDetails(this.project)
     }
@@ -290,7 +286,7 @@ class Page {
           e.preventDefault()
       }
     })
-    inputBox.addEventListener('input', e => {
+    inputBox.addEventListener('input', () => {
       resizeTextarea(inputBox)
     })
     inputBox.addEventListener('blur', () => {
@@ -360,16 +356,45 @@ class Page {
       Object.assign(document.createElement('button'), {
         className: 'completed',
         textContent: 'X',
-        onclick: e => this.completeTask(e.target)
+        onclick: this.completeTask
       })
     )
-    details.appendChild(
-      Object.assign(document.createElement('button'), {
-        className: 'move',
-        textContent: 'Move to a different Project',
-        onclick: e => this.moveTaskToAnotherProject(e.target)
+    if (Tab.LIST.length > 1) {
+      const moveDiv = details.appendChild(
+        Object.assign(document.createElement('div'), {
+          className: 'move'
+        })
+      )
+      moveDiv.appendChild(
+        Object.assign(document.createElement('button'), {
+          className: 'moveButton',
+          textContent: 'Move to a different Project'
+        })
+      )
+      const moveLinks = moveDiv.appendChild(
+        Object.assign(document.createElement('div'), {
+          className: 'moveLinks'
+        })
+      )
+      if (Tab.LIST.length < 7) {
+        moveLinks.style.height = 'auto'
+      }
+      Tab.LIST.forEach(tab => {
+        if (tab.project !== this.project) {
+          moveLinks.appendChild(
+            Object.assign(document.createElement('a'), {
+              href: '#',
+              textContent: tab.project.title,
+              onclick: () => {
+                this.currentTask.moveToProject(tab.project)
+                this.projectDetails(this.project)
+              }
+            })
+          )
+        }
       })
-    )
+    }
+
     details.appendChild(
       Object.assign(document.createElement('div'), {
         className: 'description',

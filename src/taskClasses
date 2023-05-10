@@ -39,6 +39,12 @@ class Task {
     this.priority = priority
   }
 
+  moveToProject (project) {
+    this.project.remove(this)
+    this.project = project
+    this.project.add(this)
+  }
+
   delete () {
     return this.project.remove(this)
   }

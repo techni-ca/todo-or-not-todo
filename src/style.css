@@ -197,7 +197,7 @@
   font-weight: normal;
   width: 2.7rem;
 }
-.completed, .priority, .duedate, .move, #new, #delete, #date, #priorityList {
+.completed, .priority, .duedate, #new, #delete, #date, #priorityList {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -210,12 +210,64 @@
   padding: 0 2px;
 }
 .move {
-  background-color: orange;
-  font-style: italic;
+  position: absolute;
+  display: inline-block;
+  box-sizing: border-box;
+  padding: 0px;
   right: 2rem;
-  top: 1px;
-  transform: translateY(-50%);
+  top: calc(1px - 0.6rem);
 }
+.moveButton {
+  background-color: orange;
+  vertical-align: top;
+  font-style: italic;
+  border: 1px solid blue;
+  border-radius: 2px;
+  box-sizing: border-box;
+  height: 1.2rem;
+  font-size: x-small;
+  padding: 0 5px;
+}
+.moveLinks {
+  display: none;
+  border: 1px solid blue;
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+  border-top: none;
+  box-sizing: border-box;
+  position: absolute;
+  background-color: #f1f1f1;
+  width: 100%;
+  height: calc(1px + 7.2rem);
+  overflow: auto;
+  z-index: 1;
+}
+.moveLinks a {
+  color: black;
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: x-small;
+  height: 1.2rem;
+}
+.moveLinks a:hover {
+  background-color: orange;
+}
+.move:hover .moveLinks {
+  display: block;
+}
+.move:hover .moveButton {
+  background-color: darkorange; 
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom: none; 
+ }
+
 .completed {
   font-weight: bold;
   background-color: red;
