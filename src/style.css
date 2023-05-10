@@ -41,7 +41,7 @@
   border-left: none;
   padding: .5rem;
   background-color: #b0e0e6;
-  flex: 0 1 10%;
+  flex: 0 1 10rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -67,7 +67,7 @@
   font-weight: bold;
   overflow: visible;
   background-color: var(--page-bgcolor);
-  flex: 0 0 10%;
+  flex-shrink: 0;
 }
 .active + .tab {
   border-left: var(--default-border);
@@ -79,7 +79,7 @@
   border-top: none;
   border-left: none;
   border-right: none;
-  flex: 1 0 0;
+  flex: 1 1 0;
   background-color: var(--title-bgcolor);
 }
 .page {

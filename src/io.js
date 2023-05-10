@@ -28,7 +28,6 @@ class Tab {
     Tab.LIST.push(this)
     this.element.classList.add('tab')
     this.element.textContent = this.project.title
-    this.element.style.flexBasis = `${Tab.tabSize}%`
     document
       .querySelector('.tab-bar')
       .insertBefore(this.element, document.getElementById('add'))
