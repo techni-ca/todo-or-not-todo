@@ -8,6 +8,12 @@ function resizeTextarea (element) {
     element.rows = element.rows + 1
   }
 }
+function myDateFormat (date) {
+  const yyyy = '' + date.getFullYear()
+  const mm = ('0' + (date.getMonth() + 1)).slice(-2)
+  const dd = ('0' + date.getDate()).slice(-2)
+  return `${yyyy}-${mm}-${dd}`
+}
 
 class Tab {
   static LIST = []
@@ -302,15 +308,49 @@ class Page {
   }
 
   editDueDate (element) {
-    console.log(
-      `change ${
-        element.className
-      } from ${this.currentTask.dueDate.toDateString()}`
-    )
+    const datePicker = Object.assign(document.createElement('input'), {
+      id: 'date',
+      type: 'date',
+      value: myDateFormat(this.currentTask.dueDate),
+      onblur: () => {
+        this.currentTask.dueDate = new Date(datePicker.value + 'T12:00:00')
+        datePicker.remove()
+        Object.assign(element, {
+          textContent: `${this.currentTask.dueDate.toDateString()}`,
+          onclick: e => this.editDueDate(e.target)
+        })
+      }
+    })
+    element.onclick = ''
+    element.parentNode.appendChild(datePicker)
+    datePicker.focus({ focusVisible: true })
   }
 
   editPriority (element) {
-    console.log(`change ${element.className} from ${this.currentTask.priority}`)
+    const priorityList = Object.assign(document.createElement('select'), {
+      id: 'priorityList',
+      size: '9'
+    })
+    for (let i = 1; i < 10; i++) {
+      priorityList.appendChild(Object.assign(document.createElement('option'), {
+        value: i,
+        textContent: i,
+        selected: (i === this.currentTask.priority),
+        onclick: () => {
+          this.currentTask.priority = i
+          priorityList.remove()
+          Object.assign(element, {
+            textContent: `${this.currentTask.priority}`,
+            onclick: e => this.editPriority(e.target)
+          })
+        }
+      }))
+    }
+    const translateY = 10.5 * (9 - this.currentTask.priority)
+    priorityList.style.transform = `translateY(${translateY}%)`
+    element.onclick = ''
+    element.parentNode.appendChild(priorityList)
+    priorityList.focus({ focusVisible: true })
   }
 
   openTask (element, task) {

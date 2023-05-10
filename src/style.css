@@ -189,13 +189,15 @@
   content: 'Priority:';
   font-style: italic;
   font-weight: normal;
+  width: 2.5rem;
 }
 .duedate::before {
   content: 'Due Date:';
   font-style: italic;
   font-weight: normal;
+  width: 2.7rem;
 }
-.completed, .priority, .duedate, .move, #new, #delete {
+.completed, .priority, .duedate, .move, #new, #delete, #date, #priorityList {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -205,7 +207,7 @@
   position: absolute;
   font-size: x-small;
   height: 1.2rem;
-  padding: 0 .2rem;
+  padding: 0 2px;
 }
 .move {
   background-color: orange;
@@ -227,18 +229,19 @@
   font-weight: bold;
   background-color: cyan;
   right: 0.75rem;
+  width: 3.5rem;
   bottom: -1px;
-  width: 3.25rem;
+ 
   transform: translateY(50%);
 }
 .duedate {
   background-color: cyan;
-  right: 4.25rem;
+  right: 4.5rem;
   bottom: -1px;
-  width: auto;
-  font-weight: bold;
+  font-weight: bold; 
+  width: 8rem;
   transform: translateY(50%);
-}
+} 
 #new {
   left: 10px;
   border-color: green;
@@ -250,4 +253,29 @@
   background-color: red;
   color: white;
   display: none;
+}
+#date {
+  outline: none;
+  background-color: cyan;
+  border-left: none;
+  width: 5rem;
+  right: 4.5rem;
+  bottom: -1px;
+  font-weight: bold;
+  transform: translateY(50%);
+}
+#priorityList {
+  overflow: visible;
+  outline: none;
+  background-color: cyan;
+  padding: 3px 2px;
+  height: 7.7rem;
+  width: 1 rem;
+  right: 0.75rem;
+  bottom: calc(-0.6rem - 1pt);
+  /* transform: translateY(10.5% * (9 - initial value)) */
+}
+#priorityList > * {
+  font-size: x-small;
+  font-weight: bold;
 }
