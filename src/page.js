@@ -252,8 +252,7 @@ export class Page {
       Project.LIST.forEach(project => {
         if (project !== this.project) {
           moveLinks.appendChild(
-            Object.assign(document.createElement('a'), {
-              href: '#',
+            Object.assign(document.createElement('span'), {
               textContent: project.title,
               onclick: () => {
                 this.currentTask.moveToProject(project)
