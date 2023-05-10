@@ -1,6 +1,8 @@
 import starterHTML from './index.html'
-import './style.css'
-import { Project } from './taskClasses'
+import './styles/default.css'
+import './styles/tab.css'
+import './styles/page.css'
+import { Project } from './project'
 import { Tab } from './tab'
 import { Page } from './page'
 
@@ -57,5 +59,4 @@ class IO {
   }
 }
 
-const inputOutput = new IO()
-export { inputOutput }
+export const inputOutput = new IO()

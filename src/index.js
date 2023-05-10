@@ -1,7 +1,5 @@
-import { Project } from './taskClasses'
+import { Project } from './project'
 import { inputOutput } from './io'
 
-// eslint-disable-next-line no-unused-vars
 const defaultProject = new Project('General', 'This is the default project.')
-
-inputOutput.addProjects(Project.LIST)
+inputOutput.addProjects([defaultProject])

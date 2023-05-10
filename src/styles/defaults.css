@@ -1,0 +1,8 @@
+:root {
+  --default-border: 1px solid black;
+  --title-bgcolor: #87ceeb;
+  --page-bgcolor: #e0ffff;
+}
+* {
+  font-family: 'times new roman', serif;
+}

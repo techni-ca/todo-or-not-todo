@@ -1,4 +1,5 @@
-import { Project, Task } from './taskClasses'
+import { Project } from './project'
+import { Task } from './task'
 
 function resizeTextarea (element) {
   element.rows = 1
@@ -13,7 +14,7 @@ function myDateFormat (date) {
   return `${yyyy}-${mm}-${dd}`
 }
 
-class Page {
+export class Page {
   taskElements = []
   constructor (io) {
     this.io = io
@@ -323,5 +324,3 @@ class Page {
     inputBox.focus({ focusVisible: true })
   }
 }
-
-export { Page }

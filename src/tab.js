@@ -1,4 +1,4 @@
-class Tab {
+export class Tab {
   static LIST = []
   static activeTab = null
 
@@ -126,5 +126,3 @@ class Tab {
     inputBox.focus({ focusVisible: true })
   }
 }
-
-export { Tab }
