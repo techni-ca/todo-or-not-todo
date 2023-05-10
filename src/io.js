@@ -107,8 +107,8 @@ class Tab {
   }
 
   editTitle () {
+    if (this.element.childElementCount > 0) return
     const oldTitle = this.element.textContent
-    if (oldTitle === '') return
     const inputBox = document.createElement('input')
     inputBox.value = oldTitle
     inputBox.addEventListener('keydown', e => {
@@ -215,8 +215,8 @@ class Page {
   newTask () {
     const newTask = new Task(
       this.project,
-      'New Task',
-      'New Task Description',
+      '',
+      '',
       new Date(Date.now()),
       9
     )
@@ -229,8 +229,8 @@ class Page {
   }
 
   editTaskTitle (element) {
+    if (element.childElementCount > 0) return
     const oldTitle = element.textContent
-    if (oldTitle === '') return
     const inputBox = document.createElement('input')
     inputBox.value = oldTitle
     inputBox.addEventListener('keydown', e => {
@@ -266,14 +266,15 @@ class Page {
   }
 
   completeTask () {
+    console.log(this.currentTask)
     if (this.currentTask.delete()) {
       this.projectDetails(this.project)
     }
   }
 
   editTaskDescription (element) {
+    if (element.childElementCount > 0) return
     const oldDescription = element.textContent
-    if (oldDescription === '') return
     const inputBox = document.createElement('textarea')
     inputBox.value = oldDescription
 
@@ -356,7 +357,7 @@ class Page {
       Object.assign(document.createElement('button'), {
         className: 'completed',
         textContent: 'X',
-        onclick: this.completeTask
+        onclick: () => this.completeTask()
       })
     )
     if (Tab.LIST.length > 1) {
@@ -423,9 +424,9 @@ class Page {
   }
 
   editDescription () {
+    if (this.description.childElementCount > 0) return
     this.closeTasks()
     const oldDescription = this.description.textContent
-    if (oldDescription === '') return
     const inputBox = document.createElement('textarea')
     inputBox.value = oldDescription
     inputBox.addEventListener('keydown', e => {
@@ -502,7 +503,7 @@ class IO {
   watchAddTab () {
     document.getElementById('add').addEventListener('click', () => {
       this.activateTab(
-        this.addTab(new Project('New Project Title', 'New Project Description'))
+        this.addTab(new Project('', ''))
       )
     })
   }

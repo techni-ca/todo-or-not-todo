@@ -47,6 +47,11 @@
   white-space: nowrap;
   font-size: large;
 }
+.tab:empty::before {
+  font-style: italic;
+  color: red;
+  content: '(no title)';
+}
 #add {
   flex: 0 0 content;
   background-color: #a0cfec;
@@ -98,7 +103,11 @@
   margin-left: 5px;
   margin-right: 5px;
 }
-
+#description:empty::before {
+  font-style: italic;
+  color: red;
+  content: '(no description)';
+}
 .active > input {
   border-style: none none dotted none;
   outline: none;
@@ -112,7 +121,6 @@
   font-style: italic;
   background-color: var(--page-bgcolor);
 }
-
 #description > textarea {
   border-style: none none dotted none;
   outline: none;
@@ -143,6 +151,11 @@
   font-weight: bold;
   width: calc(100% - 10rem)
 }
+.current:empty::before {
+  font-style: italic;
+  color: red;
+  content: '(no title)';
+}
 .current > input {
   border-style: none none dotted none;
   outline: none;
@@ -171,6 +184,11 @@
   margin: 0.8rem 10px;
   font-size: medium;
   position: relative;
+}
+.description:empty::before {
+  font-style: italic;
+  color: red;
+  content: '(no description)';
 }
 .description > textarea {
   border-style: none none dotted none;
@@ -255,8 +273,10 @@
   font-size: x-small;
   height: 1.2rem;
 }
-.moveLinks a:hover {
-  background-color: orange;
+a:empty::before {
+    font-style: italic;
+    color: red;
+    content: '(no title)';
 }
 .move:hover .moveLinks {
   display: block;
