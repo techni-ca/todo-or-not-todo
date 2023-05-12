@@ -186,7 +186,7 @@
   font-size: x-small;
   height: 1.2rem;
 }
-span:empty::before {
+.moveLinks span:empty::before {
     font-style: italic;
     color: red;
     content: '(untitled project)';
