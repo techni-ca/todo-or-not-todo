@@ -7,31 +7,20 @@
   margin-bottom: 0px;
   background-color: var(--title-bgcolor);
 }
-.tab-bg {
-  display: grid;
-  grid-template: 50% 50% / 100%;
-}
-.tab-bg-upper {
-  grid-area: 1 / 1 / 2 / 2;
-  background-color: var(--title-bgcolor);
-}
-.tab-bg-lower {
-  grid-area: 2 / 1 / 3 / 2;
-  background-color: var(--page-bgcolor);
-}
 .tab-bar {
-  grid-area: 1 / 1 / 3 / 2;
+  background-color: var(--title-bgcolor);
   display: flex;
   border: var(--default-border);
   border-top: none;
   border-bottom: none;
+  box-shadow: inset 0px -.5rem var(--page-bgcolor)
 }
 .tab {
   border: var(--default-border);
   border-top-left-radius: .5rem;
   border-top-right-radius: .5rem;
   border-left: none;
-  padding: .5rem;
+  padding: .3rem;
   background-color: #b0e0e6;
   flex: 0 1 10rem;
   overflow: hidden;
@@ -39,26 +28,26 @@
   white-space: nowrap;
   font-size: large;
 }
-.tab:empty::before {
+.tab:empty {
   font-style: italic;
   color: red;
+}
+.tab:empty::before {
   content: '(untitled project)';
 }
-#add {
+#add, #left, #right {
   flex: 0 0 content;
+}
+#add {
   background-color: #a0cfec;
 }
 #left, #right {
-  flex: 0 0 content;
   background-color: #bbffff;
-
 }
 #left {
-  border-right: var(--default-border);
   border-bottom-right-radius: .5rem;
 }
 .active {
-  border-left: none;
   border-right: none;
   border-bottom: none;
   font-weight: bold;
@@ -66,16 +55,27 @@
   background-color: var(--page-bgcolor);
   flex-shrink: 0;
 }
+.active > input {
+  border-style: none none dotted none;
+  outline: none;
+  box-sizing: border-box;  
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  font-size: large;
+  font-weight: bold;
+  font-style: italic;
+  background-color: var(--page-bgcolor);
+}
 .active + .tab {
   border-left: var(--default-border);
   border-bottom-left-radius: .5rem;
 }
 
 .after-tab {
-  border: var(--default-border);
-  border-top: none;
-  border-left: none;
-  border-right: none;
+  border: none;
+  border-bottom: var(--default-border);
   flex: 1 1 0;
   background-color: var(--title-bgcolor);
 }

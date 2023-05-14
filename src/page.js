@@ -223,7 +223,7 @@ export class Page {
       className: 'details'
     })
     details.appendChild(
-      Object.assign(document.createElement('button'), {
+      Object.assign(document.createElement('div'), {
         className: 'completed',
         textContent: 'X',
         onclick: () => this.completeTask()
