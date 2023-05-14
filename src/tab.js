@@ -78,6 +78,7 @@ export class Tab {
   }
 
   moveActive () {
+    this.project.switchWith(Tab.activeTab.project)
     ;[this.project, Tab.activeTab.project] = [
       Tab.activeTab.project,
       this.project

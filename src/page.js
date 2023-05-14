@@ -229,39 +229,43 @@ export class Page {
         onclick: () => this.completeTask()
       })
     )
-    if (Project.LIST.length > 1) {
-      const moveDiv = details.appendChild(
-        Object.assign(document.createElement('div'), {
-          className: 'move'
-        })
-      )
-      moveDiv.appendChild(
-        Object.assign(document.createElement('button'), {
-          className: 'moveButton',
-          textContent: 'Move to a different Project'
-        })
-      )
-      const moveLinks = moveDiv.appendChild(
-        Object.assign(document.createElement('div'), {
-          className: 'moveLinks'
-        })
-      )
-      if (Project.LIST.length < 7) {
-        moveLinks.style.height = 'auto'
-      }
-      Project.LIST.forEach(project => {
-        if (project !== this.project) {
-          moveLinks.appendChild(
-            Object.assign(document.createElement('span'), {
-              textContent: project.title,
-              onclick: () => {
-                this.currentTask.moveToProject(project)
-                this.projectDetails(this.project)
-              }
-            })
-          )
-        }
+    const moveDiv = details.appendChild(
+      Object.assign(document.createElement('div'), {
+        className: 'move'
       })
+    )
+    moveDiv.appendChild(
+      Object.assign(document.createElement('button'), {
+        className: 'moveButton',
+        textContent: 'Move to a different Project'
+      })
+    )
+    const moveLinks = moveDiv.appendChild(
+      Object.assign(document.createElement('div'), {
+        className: 'moveLinks'
+      })
+    )
+    let projectCount = 0
+    Project.LIST.forEach(project => {
+      if (project !== null && project !== this.project) {
+        moveLinks.appendChild(
+          Object.assign(document.createElement('span'), {
+            textContent: project.title,
+            onclick: () => {
+              this.currentTask.moveToProject(project)
+              this.projectDetails(this.project)
+            }
+          })
+        )
+        projectCount++
+      }
+    })
+    if (projectCount < 7) {
+      console.log(projectCount)
+      moveLinks.style.height = 'auto'
+      if (projectCount === 0) {
+        moveDiv.style.display = 'none'
+      }
     }
 
     details.appendChild(
