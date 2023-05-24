@@ -261,7 +261,6 @@ export class Page {
       }
     })
     if (projectCount < 7) {
-      console.log(projectCount)
       moveLinks.style.height = 'auto'
       if (projectCount === 0) {
         moveDiv.style.display = 'none'

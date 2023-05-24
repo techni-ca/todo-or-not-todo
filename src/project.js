@@ -10,6 +10,12 @@ export class Project {
   }
 
   set title (newTitle) {
+    if (newTitle.length < 2) {
+      throw new Error('Project title too short')
+    }
+    if (newTitle.length > 20) {
+      throw new Error('Project title too long')
+    }
     this._title = newTitle
     this.storeProjects()
   }

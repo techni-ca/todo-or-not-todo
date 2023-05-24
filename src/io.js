@@ -25,12 +25,13 @@ class IO {
 
   addProjects (list) {
     list.forEach(project => this.addTab(project))
-    this.activateTab(Tab.activeTab)
+    this.activateTab(Tab.LIST[0])
   }
 
   activateTab (tabToActivate) {
-    tabToActivate.makeActive()
-    this.page.projectDetails(tabToActivate.project)
+    if (tabToActivate.makeActive()) {
+      this.page.projectDetails(tabToActivate.project)
+    }
   }
 
   addTab (project) {
@@ -40,13 +41,8 @@ class IO {
   }
 
   watchTab (tab) {
-    tab.element.addEventListener('click', () => {
-      this.page.closeTasks()
-      if (tab.isActive()) {
-        tab.editTitle()
-      } else {
-        this.activateTab(tab)
-      }
+    tab.element.addEventListener('focus', (e) => {
+      this.activateTab(tab)
     })
   }
 

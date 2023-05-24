@@ -3,17 +3,19 @@ export class Tab {
   static activeTab = null
 
   constructor (project) {
-    if (Tab.activeTab === null) {
-      Tab.activeTab = this
-    }
-    this.element = document.createElement('span')
     this.project = project
     Tab.LIST.push(this)
+    this.element = document.createElement('span')
     this.element.classList.add('tab')
-    this.element.textContent = this.project.title
+    this.element.tabIndex = 0
+    this.resetTitle()
     document
       .querySelector('.tab-bar')
       .insertBefore(this.element, document.getElementById('add'))
+  }
+
+  resetTitle () {
+    this.element.innerText = this.project.title
   }
 
   deleteTab () {
@@ -34,21 +36,77 @@ export class Tab {
     return this.element.classList.contains('active')
   }
 
+  makeInactive () {
+    if (this.clickableController !== undefined) {
+      this.clickableController.abort()
+      this.clickableController = undefined
+    }
+    if (this.editableController !== undefined) {
+      this.editableController.abort()
+      this.editableController = undefined
+    }
+    this.element.classList.remove('active')
+    this.element.contentEditable = 'false'
+    document.getElementById('left')?.remove()
+    document.getElementById('right')?.remove()
+    Tab.activeTab = null
+  }
+
+  makeClickable (otherEventController) {
+    otherEventController.abort()
+    this.clickableController = new AbortController()
+    this.element.addEventListener(
+      'click',
+      () => {
+        this.makeTitleEditable()
+      },
+      {
+        once: true,
+        signal: this.clickableController.signal
+      }
+    )
+    this.element.addEventListener(
+      'keydown',
+      e => {
+        if ((e.key === ' ') | (e.key === 'Enter')) {
+          this.makeTitleEditable()
+          e.preventDefault()
+        }
+      },
+      {
+        once: true,
+        signal: this.clickableController.signal
+      }
+    )
+  }
+
   makeActive () {
-    if (Tab.activeTab !== null) {
-      Tab.activeTab.element.classList.remove('active')
+    if (Tab.activeTab === this) {
+      return false
     }
 
+    if (Tab.activeTab !== null) {
+      Tab.activeTab.makeInactive()
+    }
+    if (this.project.title === '') {
+      this.makeTitleEditable()
+    } else {
+      const abortMouse = new AbortController()
+      const abortKey = new AbortController()
+      document.addEventListener('click', () => { this.makeClickable(abortKey) }, { once: true, signal: abortMouse.signal })
+      document.addEventListener('keyup', () => { this.makeClickable(abortMouse) }, { once: true, signal: abortKey.signal })
+    }
     Tab.activeTab = this
     this.element.classList.add('active')
 
     this.displayMoveArrows()
+
+    return true
   }
 
   displayMoveArrows () {
     const index = Tab.LIST.indexOf(this)
 
-    document.getElementById('left')?.remove()
     const prevTab = Tab.LIST[index - 1]
     if (prevTab !== undefined) {
       const left = document.createElement('span')
@@ -62,7 +120,6 @@ export class Tab {
       )
     }
 
-    document.getElementById('right')?.remove()
     const nextTab = Tab.LIST[index + 1]
     if (nextTab !== undefined) {
       const right = document.createElement('span')
@@ -78,52 +135,72 @@ export class Tab {
   }
 
   moveActive () {
-    this.project.switchWith(Tab.activeTab.project)
-    ;[this.project, Tab.activeTab.project] = [
-      Tab.activeTab.project,
-      this.project
-    ]
-    ;[this.element.textContent, Tab.activeTab.element.textContent] = [
-      Tab.activeTab.element.textContent,
-      this.element.textContent
-    ]
+    const active = Tab.activeTab
+    active.makeInactive()
+
+    active.project.switchWith(this.project)
+    ;[active.project, this.project] = [this.project, active.project]
+
+    this.resetTitle()
+    active.resetTitle()
+
     this.makeActive()
   }
 
-  editTitle () {
-    if (this.element.childElementCount > 0) return
-    const oldTitle = this.element.textContent
-    const inputBox = document.createElement('input')
-    inputBox.value = oldTitle
-    inputBox.addEventListener('keydown', e => {
-      switch (e.key) {
-        case 'Escape':
-          inputBox.value = '' // falls through
-        case 'Enter':
-          inputBox.blur()
-      }
-    })
-    inputBox.addEventListener('beforeinput', e => {
-      if (e.data !== null) {
-        if (
-          e.data.length +
-            inputBox.value.length +
-            inputBox.selectionStart -
-            inputBox.selectionEnd >
-          20
-        ) {
+  makeTitleEditable () {
+    const self = this
+    function keydown (e) {
+      this.removeAttribute('warning')
+      if (e.key.length === 1) {
+        const selectedLength = document.getSelection().toString().length
+        const originalLength = e.target.innerText.length
+        if (originalLength - selectedLength > 19) {
           e.preventDefault()
         }
+      } else {
+        switch (e.key) {
+          case 'Escape':
+            e.target.innerText = ''
+            e.target.blur()
+            break
+          case 'Enter':
+          case 'Tab':
+            try {
+              self.project.title = this.innerText
+            } catch (err) {
+              this.setAttribute('warning', err.message)
+              e.preventDefault()
+              return
+            }
+            e.target.blur()
+        }
       }
-    })
-    inputBox.addEventListener('blur', () => {
-      if (inputBox.value !== '') {
-        this.project.title = inputBox.value
+    }
+    function paste (e) {
+      const selectedLength = document.getSelection().toString().length
+      const originalLength = e.target.innerText.length
+      const pastedLength = e.clipboardData.getData('text').length
+      if (originalLength + pastedLength - selectedLength > 20) {
+        e.preventDefault()
       }
-      this.element.textContent = this.project.title
-    })
-    this.element.textContent = ''
-    this.element.appendChild(inputBox)
-    inputBox.focus({ focusVisible: true })
+    }
+    function blur () {
+      try {
+        self.project.title = this.innerText
+      } catch {}
+      self.element.contentEditable = 'false'
+      self.resetTitle()
+    }
+
+    if (this.element.isContentEditable) return
+    this.element.contentEditable = 'true'
+    this.editableController = new AbortController()
+    const abort = { signal: this.editableController.signal }
+    this.element.addEventListener('keydown', keydown, abort)
+    this.element.addEventListener('paste', paste, abort)
+    this.element.addEventListener('blur', blur, abort)
+    const sel = window.getSelection()
+    sel.selectAllChildren(this.element)
+    sel.collapseToEnd()
   }
 }

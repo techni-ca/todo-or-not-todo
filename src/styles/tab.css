@@ -1,38 +1,41 @@
 .title {
   border: var(--default-border);
   border-bottom: none;
-  border-top-left-radius: 1rem;
-  border-top-right-radius: 1rem;
-  padding: 1rem;
-  margin-bottom: 0px;
+  border-radius: var(--radius) var(--radius) 0 0;
+  padding: var(--radius);
+  line-height: calc(var(--title-height) - 2 * var(--radius));
+  font-size: xx-large;
   background-color: var(--title-bgcolor);
+  height: var(--title-height) 
 }
 .tab-bar {
   background-color: var(--title-bgcolor);
   display: flex;
   border: var(--default-border);
+  box-sizing: border-box;
   border-top: none;
   border-bottom: none;
-  box-shadow: inset 0px -.5rem var(--page-bgcolor)
+  height: var(--tab-height);
+  box-shadow: inset 0px calc(-1 * var(--tab-radius)) var(--page-bgcolor)
 }
 .tab {
   border: var(--default-border);
-  border-top-left-radius: .5rem;
-  border-top-right-radius: .5rem;
+  border-radius: var(--tab-radius) var(--tab-radius) 0 0;
   border-left: none;
-  padding: .3rem;
+  box-sizing: border-box;
+  height: var(--tab-height);
+  line-height: var(--tab-height);
+  padding: 0 var(--tab-radius);
   background-color: #b0e0e6;
-  flex: 0 1 10rem;
+  flex: 0 1 calc(10rem + 2 * var(--tab-radius));
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: large;
 }
-.tab:empty {
+.tab:empty::before {
   font-style: italic;
   color: red;
-}
-.tab:empty::before {
   content: '(untitled project)';
 }
 #add, #left, #right {
@@ -45,32 +48,22 @@
   background-color: #bbffff;
 }
 #left {
-  border-bottom-right-radius: .5rem;
+  border-radius: var(--tab-radius) var(--tab-radius) var(--tab-radius) 0;
 }
 .active {
+  border-radius: var(--tab-radius);
   border-right: none;
   border-bottom: none;
   font-weight: bold;
   overflow: visible;
   background-color: var(--page-bgcolor);
   flex-shrink: 0;
+  position: relative;
 }
-.active > input {
-  border-style: none none dotted none;
-  outline: none;
-  box-sizing: border-box;  
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  margin: 0;
-  font-size: large;
-  font-weight: bold;
-  font-style: italic;
-  background-color: var(--page-bgcolor);
-}
+
 .active + .tab {
   border-left: var(--default-border);
-  border-bottom-left-radius: .5rem;
+  border-radius: var(--tab-radius) var(--tab-radius) 0 var(--tab-radius);
 }
 
 .after-tab {
@@ -78,4 +71,31 @@
   border-bottom: var(--default-border);
   flex: 1 1 0;
   background-color: var(--title-bgcolor);
+}
+.active:focus {
+  outline: 1px dotted grey;
+  outline-offset: -2px;
+}
+.active[contenteditable="true"]:focus {
+  outline: 2px dotted red;
+  outline-offset: -3px;
+  font-style: italic;
+}
+.active:focus:empty::before {
+  color: pink;
+  content: 'enter title';
+}
+
+.active[warning]:focus::after {
+  background: var(--page-bgcolor);
+  color: red;
+  position: absolute;
+  top: 2rem;
+  left: 0;
+  width: 12.5rem;
+  font-size: medium;
+  overflow: clip;
+  white-space: normal;
+  z-index: 1;
+  content: attr(warning);
 }

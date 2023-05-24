@@ -2,7 +2,18 @@
   --default-border: 1px solid black;
   --title-bgcolor: #87ceeb;
   --page-bgcolor: #e0ffff;
+  --radius: 1rem;
+  --title-height: 4rem;
+  --tab-radius: 0.5rem;
+  --tab-height: 2rem;
+  --outside-margin: .5rem;
+  --page-height: calc(100vh - var(--title-height) - var(--tab-height) - 2 * var(--outside-margin));
 }
 * {
   font-family: 'times new roman', serif;
+  margin: 0;
+  box-sizing: border-box;
+}
+body {
+  margin: var(--outside-margin);
 }
