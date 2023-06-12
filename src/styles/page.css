@@ -1,5 +1,6 @@
 .page {
   display: block;
+  padding: var(--tab-radius);
   border: var(--default-border);
   border-top: none;
   border-radius: 0 0 var(--radius) var(--radius);
@@ -8,241 +9,164 @@
   min-height: var(--page-height);
   height: auto;
 }
-#description {
-  padding: 5px;
+
+.projectDescription {
+  padding: var(--tab-radius);
   font-size: large;
-  white-space: pre-wrap;
-  margin-left: 5px;
-  margin-right: 5px;
+  width: 100%;
+  height: 100%;
+  resize: none;
+  white-space: nowrap;
+  background-color: var(--page-bgcolor);
 }
-#description:empty {
+
+.projectDescription:empty::before {
   font-style: italic;
   color: red;
-}
-#description:empty::before {
   content: '(project has no description)';
 }
-#description > textarea {
-  border-style: none none dotted none;
-  outline: none;
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  resize: none;
-  font-size: large;
+
+.projectDescription:focus {
+  border-radius: var(--tab-radius);
+  outline: 2px dotted red;
+  outline-offset: 0;
   font-style: italic;
-  background-color: var(--page-bgcolor);
 }
-#tasklist {
-  list-style-position: inside;
-  margin: 5px;
-  padding: 5px;
+
+.projectDescription:focus:empty::before {
+  color: pink;
+  content: 'enter description';
 }
-#tasklist > li {
-  font-size: medium;
+
+.tasklist {
+  border: 1px solid black;
+  border-radius: var(--tab-radius);
+  border-top: none;
+}
+
+.task {
+  position: relative;
+  border: none;
+  padding: var(--tab-radius);
+  border-top: 1px solid black;
+  border-radius: var(--tab-radius);
+  --high: red;
+  --medium: orange;
+  --low: green;
+  --priority: var(--low);
+}
+
+.task>summary {
+  height: calc(var(--tab-height) - 2 * var(--tab-radius));
+  line-height: calc(var(--tab-height) - 2 * var(--tab-radius));
+  vertical-align: top;
+}
+
+.task>summary::marker {
+  color: var(--priority);
+}
+
+.taskTitle {
+  vertical-align: top;
+  display: inline-block;
+  width: auto;
+  max-width: 85rem;
   overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
+  font-size: large;
+  text-overflow: ellipsis;
 }
-#tasklist > li:empty::before {
+
+.taskTitle:empty::before {
   font-style: italic;
   color: red;
-  content: '(untitled task)'
+  content: '(untitled task)';
 }
 
-.current {
-  font-size: medium;
-  font-weight: bold;
-  width: calc(100% - 10rem)
+.taskTitle:focus {
+  border-radius: calc(var(--tab-radius) / 2);
+  outline: 2px dotted red;
+  outline-offset: 2px;
+  font-style: italic;
 }
 
-.current > input {
-  border-style: none none dotted none;
-  outline: none;
-  width: 100%;
-  height: 100%;
+.taskTitle:focus:empty::before {
+  color: pink;
+  content: 'enter title';
+}
+
+.taskDuedate {
+  position: absolute;
+  right: var(--tab-radius);
+  display: inline-block;
+  width: fit-content;
+  font-size: large;
+}
+
+.taskDuedate:before {
+  content: 'Due: ';
+}
+
+.taskDescription {
+  padding: var(--tab-radius);
+  margin: 10px 0 5px;
   font-size: medium;
-  font-weight: bold;
-  padding: 0;
-  background-color: var(--page-bgcolor);
 }
-.details {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid blue;
-  background-color: white;
-  border-radius: 10px;
-  margin-bottom: 1rem;
-  position: relative;
-}
-.description {
-  white-space: pre-wrap;
-  flex: 1;
-  margin: 0.8rem 10px;
-  font-size: medium;
-  position: relative;
-}
-.description:empty::before {
+
+.taskDescription:empty::before {
   font-style: italic;
   color: red;
   content: '(task has no description)';
 }
-.description > textarea {
-  border-style: none none dotted none;
-  outline: none;
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  font-size: medium;
+
+.taskDescription:focus {
+  border-radius: var(--tab-radius);
+  outline: 2px dotted red;
+  outline-offset: -3px;
   font-style: italic;
-  resize: none;
 }
 
-.priority::before {
-  content: 'Priority:';
-  font-style: italic;
-  font-weight: normal;
-  width: 2.5rem;
+.taskDescription:focus:empty::before {
+  color: pink;
+  content: 'enter description';
 }
-.duedate::before {
-  content: 'Due Date:';
-  font-style: italic;
-  font-weight: normal;
-  width: 2.7rem;
+
+.taskPriority {
+  margin-left: auto;
+  width: fit-content;
+  font-size: large;
+  color: var(--priority);
 }
-.completed, .priority, .duedate, #new, #delete, #date, #priorityList {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid blue;
-  border-radius: 2px;
-  position: absolute;
-  font-size: x-small;
-  height: 1.2rem;
-  padding: 0 2px;
-}
-.move {
-  position: absolute;
-  display: inline-block;
-  padding: 0px;
-  right: 2rem;
-  top: calc(1px - 0.6rem);
-}
-.moveButton {
-  background-color: orange;
-  vertical-align: top;
-  font-style: italic;
-  border: 1px solid blue;
-  border-radius: 2px;
-  height: 1.2rem;
-  font-size: x-small;
-  padding: 0 5px;
-}
-.moveLinks {
-  display: none;
-  border: 1px solid blue;
-  border-bottom-left-radius: 2px;
-  border-bottom-right-radius: 2px;
-  border-top: none;
-  position: absolute;
-  background-color: #f1f1f1;
-  width: 100%;
-  height: calc(1px + 7.2rem);
-  overflow: auto;
-  z-index: 1;
-}
-.moveLinks span {
+
+.taskPriority:before {
   color: black;
-  display: block;
-  padding: 0px 5px;
-  line-height: 1.2rem;
-  text-align: center;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: x-small;
-  height: 1.2rem;
+  content: 'Priority: ';
 }
-.moveLinks span:empty::before {
-    font-style: italic;
-    color: red;
-    content: '(untitled project)';
-}
-.moveLinks span:hover {
-  background-color: darkorange;
-}
-.move:hover .moveLinks {
-  display: block;
-}
-.move:hover .moveButton {
-  background-color: darkorange; 
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-  border-bottom: none; 
- }
 
-.completed {
-  font-weight: bold;
-  background-color: red;
-  color: white;
-  top: 1px;
-  right: .75rem;
-  width: 1rem;
-  transform: translateY(-50%);
-}
-.priority {
-  font-weight: bold;
-  background-color: cyan;
-  right: 0.75rem;
-  width: 3.5rem;
-  bottom: -1px;
-  transform: translateY(50%);
-}
-.duedate {
-  background-color: cyan;
-  right: 4.5rem;
-  bottom: -1px;
-  font-weight: bold; 
-  width: 8rem;
-  transform: translateY(50%);
-} 
-#new {
-  position: relative;
-  left: 10px;
-  bottom: 10px;
-  border-color: green;
-  background-color: lightgreen;
-}
-#delete {
-  left: calc(10px + 3rem);
-  bottom: 10px;
-  border-color: black;
-  background-color: red;
-  color: white;
-  display: none;
-}
-#date {
+#datepicker {
+  height: calc(var(--tab-height) - 2 * var(--tab-radius));
+  line-height: calc(var(--tab-height) - 2 * var(--tab-radius));
+  vertical-align: top;
   outline: none;
-  background-color: cyan;
-  border-left: none;
-  width: 5rem;
-  right: 4.5rem;
-  bottom: -1px;
-  font-weight: bold;
-  transform: translateY(50%);
+  border: none;
+  padding: 0;
+  background-color: var(--page-bgcolor);
+  display: inline-block;
+  font-size: large;
+  position: absolute;
+  width: 10rem;
+  right: var(--tab-radius);
 }
-#priorityList {
-  overflow: visible;
-  outline: none;
-  background-color: cyan;
-  padding: 3px 2px;
-  height: 7.7rem;
-  width: 1 rem;
-  right: 0.75rem;
-  bottom: calc(-0.6rem - 1pt);
+#datepicker:before {
+  content: 'Due:';
+  padding-right: 0.5rem;
 }
-#priorityList > * {
-  font-size: x-small;
-  font-weight: bold;
+.taskLastLine {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+button {
+  padding: 5px;
+  margin: 5px;
 }

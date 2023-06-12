@@ -42,8 +42,16 @@ export class Task {
   }
 
   set priority (newPriority) {
-    this._priority = newPriority
-    this.getProject().storeProjects()
+    switch (newPriority) {
+      case 'high':
+      case 'medium':
+      case 'low':
+        this._priority = newPriority
+        this.getProject().storeProjects()
+        break
+      default:
+        throw new Error('Not a valid Priority')
+    }
   }
 
   constructor (project, title, description, dueDate, priority) {

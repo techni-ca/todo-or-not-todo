@@ -6,7 +6,7 @@
   line-height: calc(var(--title-height) - 2 * var(--radius));
   font-size: xx-large;
   background-color: var(--title-bgcolor);
-  height: var(--title-height) 
+  height: var(--title-height)
 }
 .tab-bar {
   background-color: var(--title-bgcolor);
@@ -22,7 +22,6 @@
   border: var(--default-border);
   border-radius: var(--tab-radius) var(--tab-radius) 0 0;
   border-left: none;
-  box-sizing: border-box;
   height: var(--tab-height);
   line-height: var(--tab-height);
   padding: 0 var(--tab-radius);
@@ -38,16 +37,11 @@
   color: red;
   content: '(untitled project)';
 }
-#add, #left, #right {
-  flex: 0 0 content;
-}
 #add {
+  flex: 0 0 content;
   background-color: #a0cfec;
 }
-#left, #right {
-  background-color: #bbffff;
-}
-#left {
+.beforeactive {
   border-radius: var(--tab-radius) var(--tab-radius) var(--tab-radius) 0;
 }
 .active {

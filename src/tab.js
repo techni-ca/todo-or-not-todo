@@ -1,3 +1,5 @@
+import { Task } from './task'
+
 export class Tab {
   static LIST = []
   static activeTab = null
@@ -7,11 +9,27 @@ export class Tab {
     Tab.LIST.push(this)
     this.element = document.createElement('span')
     this.element.classList.add('tab')
+    this.element.addEventListener('dragover', (e) => { this.dragEvent(e) })
+    this.element.addEventListener('drop', (e) => { this.dropEvent(e) })
     this.element.tabIndex = 0
     this.resetTitle()
     document
       .querySelector('.tab-bar')
       .insertBefore(this.element, document.getElementById('add'))
+  }
+
+  dragEvent (e) {
+    if (!this.isActive()) e.preventDefault()
+  }
+
+  dropEvent (e) {
+    if (e.dataTransfer.getData('type') === 'task') {
+      Task.lastDragged.moveToProject(this.project)
+    } else if (e.dataTransfer.getData('type') === 'tab') {
+      this.moveActive()
+    } else {
+      console.log('what was dragged?')
+    }
   }
 
   resetTitle () {
@@ -46,9 +64,13 @@ export class Tab {
       this.editableController = undefined
     }
     this.element.classList.remove('active')
+    const beforeActive = this.element.previousElementSibling
+    if (beforeActive !== null) {
+      beforeActive.classList.remove('beforeactive')
+    }
+    this.element.draggable = false
+    this.element.ondragstart = ''
     this.element.contentEditable = 'false'
-    document.getElementById('left')?.remove()
-    document.getElementById('right')?.remove()
     Tab.activeTab = null
   }
 
@@ -84,10 +106,10 @@ export class Tab {
     if (Tab.activeTab === this) {
       return false
     }
-
     if (Tab.activeTab !== null) {
       Tab.activeTab.makeInactive()
     }
+    Tab.activeTab = this
     if (this.project.title === '') {
       this.makeTitleEditable()
     } else {
@@ -96,42 +118,18 @@ export class Tab {
       document.addEventListener('click', () => { this.makeClickable(abortKey) }, { once: true, signal: abortMouse.signal })
       document.addEventListener('keyup', () => { this.makeClickable(abortMouse) }, { once: true, signal: abortKey.signal })
     }
-    Tab.activeTab = this
-    this.element.classList.add('active')
 
-    this.displayMoveArrows()
+    this.element.classList.add('active')
+    const beforeActive = this.element.previousElementSibling
+    if (beforeActive !== null) {
+      beforeActive.classList.add('beforeactive')
+    }
+    this.element.draggable = true
+    this.element.ondragstart = (e) => {
+      e.dataTransfer.setData('type', 'tab')
+    }
 
     return true
-  }
-
-  displayMoveArrows () {
-    const index = Tab.LIST.indexOf(this)
-
-    const prevTab = Tab.LIST[index - 1]
-    if (prevTab !== undefined) {
-      const left = document.createElement('span')
-      left.addEventListener('click', () => prevTab.moveActive())
-      this.element.before(
-        Object.assign(left, {
-          id: 'left',
-          className: 'tab',
-          textContent: '<'
-        })
-      )
-    }
-
-    const nextTab = Tab.LIST[index + 1]
-    if (nextTab !== undefined) {
-      const right = document.createElement('span')
-      right.addEventListener('click', () => nextTab.moveActive())
-      this.element.after(
-        Object.assign(right, {
-          id: 'right',
-          className: 'tab',
-          textContent: '>'
-        })
-      )
-    }
   }
 
   moveActive () {
@@ -144,7 +142,7 @@ export class Tab {
     this.resetTitle()
     active.resetTitle()
 
-    this.makeActive()
+    this.element.focus()
   }
 
   makeTitleEditable () {

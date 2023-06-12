@@ -1,4 +1,4 @@
-import starterHTML from './index.html'
+import indexHTML from './html/index.html'
 import './styles/default.css'
 import './styles/tab.css'
 import './styles/page.css'
@@ -10,7 +10,7 @@ class IO {
   constructor () {
     if (!IO._instance) {
       IO._instance = this
-      document.body.innerHTML = starterHTML
+      document.body.innerHTML = indexHTML
       this.page = new Page(this)
       this.watchAddTab()
     }
